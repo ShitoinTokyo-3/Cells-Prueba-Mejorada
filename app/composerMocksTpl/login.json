@@ -1,0 +1,66 @@
+{
+  "template": {
+    "tag": "cells-template-paper-drawer-panel",
+    "properties": {
+      "disableEdgeSwipe": true,
+      "headerFixed": true
+    }
+  },
+  "components": [
+    {
+      "zone": "app__header",
+      "type": "UI",
+      "familyPath": "../../components/cells-component-app-header",
+      "tag": "cells-component-app-header",
+      "properties": {
+        "text": "Evolutions Pokedex"
+      }
+    },
+    {
+      "zone": "app__main",
+      "type": "DM",
+      "familyPath": "../elements/pokemon-dm",
+      "tag": "pokemon-dm",
+      "properties": {
+      "cellsConnections": {
+          "in": {
+            "go-home":{
+              "bind":"goHome"
+            }
+          },
+          "out": {
+            "pokemon-list-home-data":{
+              "bind":"data-success-pokemon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "zone": "app__main",
+      "type":"UI",
+      "familyPath": "../elements/pokemon-list",
+      "tag":"pokemon-list",
+      "properties": {
+        "cellsConnections": {
+          "in": {
+            "pokemon-list-home-data": {
+              "bind": "data"
+            }
+          },
+          "out": {
+            "detail-pokemon": {
+              "bind": "navigate-to-detail",
+              "link": {
+                "page": "another",
+                "params": {
+                  "id": "id"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

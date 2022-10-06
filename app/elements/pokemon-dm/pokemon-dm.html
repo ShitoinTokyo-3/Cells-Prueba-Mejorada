@@ -1,0 +1,64 @@
+<link rel="import" href="../../../components/cells-generic-dp/cells-generic-dp.html">
+
+<dom-module id="pokemon-dm">
+
+  <template>
+    <cells-generic-dp
+      id="ajax"
+      host="https://pokeapi.co"
+      path="api/v2/pokemon/{{id}}"
+      on-request-success="_onResponse"
+      auto
+    ></cells-generic-dp>
+  </template>
+
+  <script>
+    class PokemonDm extends Polymer.Element {
+
+      static get is() {
+        return 'pokemon-dm';
+      }
+
+      // Declare properties for the element's public API
+      static get properties() {
+        return {
+            id:{
+              type: Number,
+            },
+        };
+      }
+
+      _onResponse(e) {
+        if(e.detail.base_experience){
+            this.dispatchEvent(new CustomEvent('pokemon-detail-response', {
+                bubbles: true,
+                composed: true,
+                detail: e.detail
+            }));
+            
+        }else if(e.detail.results){
+            const dataResults = e.detail.results.map((item) => {
+                const id = item.url.split('/')[6];
+                return {
+                    id,
+                    name: item.name,
+                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`                }
+            });
+            this.dispatchEvent(new CustomEvent('data-success-pokemon', {
+              bubbles: true,
+              composed: true,
+              detail: dataResults
+            }));
+        }
+      }
+
+      goHome() {
+        this.$.ajax.generateRequest();
+      }
+
+    }
+
+    customElements.define(PokemonDm.is, PokemonDm);
+  </script>
+
+</dom-module>
